@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Mindful Minutes</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer">
+    
+    <style>
+      body {
+          background-color: #595F59;
+          color: #fff;
+      }
+      .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .subtext {
+          color: #A5A5A5;
+      }
+
+      .player-control {
+          font-size: 4rem;
+      }
+
+      .playlist {
+          padding-left: 0;
+          list-style-type: none;
+      }
+
+      .playlist > li {
+          padding: 12px 0;
+          text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <audio class="player" controls src="./mm-deep-breathing.mp3"></audio>
+      <p class="subtext">Take a</p>
+      <h1 style="margin: 0">Mindful Pause</h1>
+      <p class="subtext" style="text-align: center">Life is a marathon<br>Not a sprint</p>
+      <span class="player-control"><span class="fa-solid fa-play" onClick="player.play()"></span></span>
+
+      <ul class="playlist"></ul>
+    </div>
+
+    <script>
+      const player = document.getElementsByClassName('player')[0];
+      const playlist = document.getElementsByClassName('playlist')[0];
+      let playerControl = document.getElementsByClassName('player-control')[0];
+
+      const audioList = [
+          {
+              name: "Deep Breathing",
+              url: "./mm-deep-breathing.mp3",
+          },
+          {
+              name: "Deep Breathing (IPPT)",
+              url: "./mm-deep-breathing-ippt.mp3",
+          },
+          {
+              name: "Muscle Relaxation",
+              url: "mm-muscle-relaxation.mp3",
+          },
+          {
+              name: "Progressive Muscle Relaxation",
+              url: "mm-progressive-muscle-relaxation.mp3",
+          },
+      ];
+
+      function changeAudio(url) {
+          player.pause();
+          player.src = url;
+          renderPlaylist(url);
+          renderPlayerControl('play');
+      }
+
+      function renderPlaylist(activeURL) {
+          let playlistChildHTML = "";
+          
+          for (let audio of audioList) {
+              playlistChildHTML += `<li class="${(activeURL === audio.url) ? 'active' : ''}" onclick="changeAudio('${audio.url}')">${audio.name}</li>`;
+          }
+
+          playlist.innerHTML = playlistChildHTML;
+      }
+
+      function renderPlayerControl(mode) {
+          playerControl.innerHTML = `<span class="fa-solid fa-${mode}" onClick="player.${mode}()"></span>`;
+      }
+
+      player.addEventListener('play', () => renderPlayerControl('pause'));
+      player.addEventListener('pause', () => renderPlayerControl('play'));
+      player.addEventListener('ended', () => renderPlayerControl('play'));
+
+      changeAudio(audioList[0].url);
+    </script>
+  </body>
+</html>
